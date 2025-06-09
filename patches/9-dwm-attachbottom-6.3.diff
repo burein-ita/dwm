@@ -44,11 +44,11 @@ diff -up dwm-6.3/dwm.c dwm-6.3-attachbottom/dwm.c
  	focus(NULL);
  	arrange(NULL);
 @@ -1903,7 +1913,7 @@ updategeom(void)
- 					m->clients = c->next;
- 					detachstack(c);
- 					c->mon = mons;
--					attach(c);
-+					attachbottom(c);
- 					attachstack(c);
- 				}
- 				if (m == selmon)
+ 				m->clients = c->next;
+ 				detachstack(c);
+ 				c->mon = mons;
+-				attach(c);
++				attachbottom(c);
+ 				attachstack(c);
+ 			}
+ 			if (m == selmon)
