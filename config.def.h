@@ -15,7 +15,7 @@ static const char col_bg1[]         = "#000000";
 static const char col_bg2[]         = "#606080";
 static const char col_border2[]     = "#606080";
 static const char col_border1[]     = "#202020";
-static const char col_borderbar[]   = "#606080";
+static const char col_borderbar[]   = "#000000";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_text1, col_bg1,   col_border1 },
@@ -24,6 +24,12 @@ static const char *colors[][3]      = {
 
 static const char *const autostart[] = {
 	"st", NULL,
+	"st", "-e", "nnn", "data",  NULL,
+	"st", "-e", "ncmpcpp", NULL,
+	"hsetroot", "-cover", ".local/share/wallpaper/CO-1.png", NULL,
+	"xrdb", ".Xresources", NULL,
+	"dunst", NULL,
+	"picom", NULL,
 	NULL /* terminate */
 };
 
@@ -50,7 +56,7 @@ static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "",      tile },    /* first entry is default */
 	{ "",      NULL },    /* no layout function means floating behavior */
-	{ "",      monocle },
+	{ "",      monocle },
 };
 
 /* key definitions */
