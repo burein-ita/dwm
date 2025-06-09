@@ -25,7 +25,7 @@ index 4465af1..8d54b26 100644
 --- a/dwm.c
 +++ b/dwm.c
 @@ -92,7 +92,7 @@ struct Client {
- 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
+ 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
  	int bw, oldbw;
  	unsigned int tags;
 -	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
@@ -34,7 +34,7 @@ index 4465af1..8d54b26 100644
  	Client *snext;
  	Monitor *mon;
 @@ -211,6 +211,7 @@ static void tagmon(const Arg *arg);
- static void tile(Monitor *);
+ static void tile(Monitor *m);
  static void togglebar(const Arg *arg);
  static void togglefloating(const Arg *arg);
 +static void togglealwaysontop(const Arg *arg);
@@ -54,7 +54,7 @@ index 4465af1..8d54b26 100644
  		} else {
  			drw_setscheme(drw, scheme[SchemeNorm]);
  			drw_rect(drw, x, 0, w, bh, 1, 1);
-@@ -1356,6 +1360,17 @@ restack(Monitor *m)
+@@ -1356,6 +1360,16 @@ restack(Monitor *m)
  		return;
  	if (m->sel->isfloating || !m->lt[m->sellt]->arrange)
  		XRaiseWindow(dpy, m->sel->win);
@@ -71,7 +71,7 @@ index 4465af1..8d54b26 100644
  	if (m->lt[m->sellt]->arrange) {
  		wc.stack_mode = Below;
  		wc.sibling = m->barwin;
-@@ -1716,6 +1731,32 @@ togglefloating(const Arg *arg)
+@@ -1716,6 +1731,26 @@ togglefloating(const Arg *arg)
  	if (selmon->sel->isfloating)
  		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
  			selmon->sel->w, selmon->sel->h, 0);
