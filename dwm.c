@@ -832,7 +832,7 @@ drawbar(Monitor *m)
 			if (m->sel->isfloating) {
 				drw_rect(drw, x + boxs, y + boxs, boxw, boxw, m->sel->isfixed, 0);
 				if (m->sel->isalwaysontop)
-					drw_rect(drw, x + boxs, y + bh - boxw, boxw, boxw, 0, 0);
+					drw_rect(drw, x + boxs, bh - y - 1 - boxw, boxw, boxw, 0, 0);
 			}
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
@@ -1949,8 +1949,14 @@ togglealwaysontop(const Arg *arg)
 	if(selmon->sel->isalwaysontop){
 		selmon->sel->isalwaysontop = 0;
 	}else{
+		/* disable others */
+		for(Monitor *m = mons; m; m = m->next)
+			for(Client *c = m->clients; c; c = c->next)
 				c->isalwaysontop = 0;
 
+		/* turn on, make it float too */
+		selmon->sel->isfloating = 1;
+		selmon->sel->isalwaysontop = 1;
 	}
 
 	arrange(selmon);
