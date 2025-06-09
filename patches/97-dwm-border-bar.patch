@@ -23,7 +23,7 @@ index 9fd0286..f1eeaa3 100644
  static Display *dpy;
  static Drw *drw;
  static Monitor *mons, *selmon;
-@@ -696,17 +696,22 @@ dirtomon(int dir)
+@@ -696,20 +696,25 @@ dirtomon(int dir)
  void
  drawbar(Monitor *m)
  {
@@ -36,11 +36,14 @@ index 9fd0286..f1eeaa3 100644
  	unsigned int i, occ = 0, urg = 0;
  	Client *c;
  
+ 	if (!m->showbar)
+ 		return;
+ 
 +	XSetForeground(drw->dpy, drw->gc, clrborder.pixel);
 +	XFillRectangle(drw->dpy, drw->drawable, drw->gc, 0, 0, m->ww, bh);
 +
  	/* draw status first so it can be overdrawn by tags later */
- 	if (m == selmon) { /* status is only drawn on selected monitor */
+ 	if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
  		drw_setscheme(drw, scheme[SchemeNorm]);
  		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 -		drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
@@ -48,7 +51,7 @@ index 9fd0286..f1eeaa3 100644
  	}
  
  	for (c = m->clients; c; c = c->next) {
-@@ -714,32 +719,33 @@ drawbar(Monitor *m)
+@@ -714,35 +719,35 @@ drawbar(Monitor *m)
  		if (c->isurgent)
  			urg |= c->tags;
  	}
@@ -66,7 +69,7 @@ index 9fd0286..f1eeaa3 100644
  				urg & 1 << i);
  		x += w;
  	}
- 	w = blw = TEXTW(m->ltsymbol);
+ 	w = TEXTW(m->ltsymbol);
  	drw_setscheme(drw, scheme[SchemeNorm]);
 -	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 +	x = drw_text(drw, x, y, w, th, lrpad / 2, m->ltsymbol, 0);
@@ -77,16 +80,19 @@ index 9fd0286..f1eeaa3 100644
  			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 -			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 +			drw_text(drw, x, y, w, th, lrpad / 2, m->sel->name, 0);
- 			if (m->sel->isfloating)
+ 			if (m->sel->isfloating) {
 -				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 +				drw_rect(drw, x + boxs, y + boxs, boxw, boxw, m->sel->isfixed, 0);
+ 				if (m->sel->isalwaysontop)
+-					drw_rect(drw, x + boxs, bh - boxw, boxw, boxw, 0, 0);
++					drw_rect(drw, x + boxs, y + bh - boxw, boxw, boxw, 0, 0);
+ 			}
  		} else {
  			drw_setscheme(drw, scheme[SchemeNorm]);
 -			drw_rect(drw, x, 0, w, bh, 1, 1);
 +			drw_rect(drw, x, y, w, th, 1, 1);
  		}
  	}
-+
  	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
  }
  
@@ -94,8 +100,8 @@ index 9fd0286..f1eeaa3 100644
  	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
  		die("no fonts could be loaded.");
  	lrpad = drw->fonts->h;
--	bh = drw->fonts->h + 2;
-+	bh = drw->fonts->h + 2 + borderpx * 2;
+-	bh = drw->fonts->h + user_bh;
++	bh = drw->fonts->h + user_bh + borderpx * 2;
  	updategeom();
  	/* init atoms */
  	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
