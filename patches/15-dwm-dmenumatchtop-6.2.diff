@@ -9,4 +9,4 @@ diff -up dwm-6.2-original/config.def.h dwm-6.2-modified/config.def.h
 +static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, topbar ? NULL : "-b", NULL };
  static const char *termcmd[]  = { "st", NULL };
  
- static Key keys[] = {
+ static const Key keys[] = {
