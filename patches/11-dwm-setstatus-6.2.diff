@@ -42,8 +42,8 @@ index 4465af1..b3c8f71 100644
 +		return 0;
 +	}
  	checkotherwm();
+ 	autostart_exec();
  	setup();
- #ifdef __OpenBSD__
 -- 
 2.28.0
 
