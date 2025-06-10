@@ -33,8 +33,8 @@ index a9ac303..e559429 100644
 @@ -94,6 +94,7 @@ static Key keys[] = {
  	TAGKEYS(                        XK_8,                      7)
  	TAGKEYS(                        XK_9,                      8)
- 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} }, 
+ 	{ MODKEY|Mod1Mask,              XK_q,      quit,           {0} },
++	{ MODKEY|Mod1Mask,              XK_c,      quit,           {1} }, 
  };
  
  /* button definitions */
@@ -70,13 +70,12 @@ diff --git a/dwm.c b/dwm.c
 index bb95e26..286eecd 100644
 --- a/dwm.c
 +++ b/dwm.c
-@@ -205,6 +205,8 @@ static void setup(void);
+@@ -205,5 +205,7 @@ static void setup(void);
  static void seturgent(Client *c, int urg);
  static void showhide(Client *c);
- static void sigchld(int unused);
+ static void spawn(const Arg *arg);
 +static void sighup(int unused);
 +static void sigterm(int unused);
- static void spawn(const Arg *arg);
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
 @@ -260,6 +262,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
@@ -86,18 +85,18 @@ index bb95e26..286eecd 100644
 +static int restart = 0;
  static int running = 1;
  static Cur *cursor[CurLast];
- static Clr **scheme;
+ static Clr **scheme, clrborder;
 @@ -1248,6 +1251,7 @@ propertynotify(XEvent *e)
- void
- quit(const Arg *arg)
- {
+ 		}
+ 	}
+ 
 +	if(arg->i) restart = 1;
  	running = 0;
  }
  
 @@ -1536,6 +1540,9 @@ setup(void)
- 	/* clean up any zombies immediately */
- 	sigchld(0);
+ 
+ 	}
  
 +	signal(SIGHUP, sighup);
 +	signal(SIGTERM, sigterm);
@@ -105,7 +104,7 @@ index bb95e26..286eecd 100644
  	/* init screen */
  	screen = DefaultScreen(dpy);
  	sw = DisplayWidth(dpy, screen);
-@@ -1637,6 +1644,20 @@ sigchld(int unused)
+@@ -1637,6 +1644,20 @@ showhide(Client *c)
  }
  
  void
@@ -125,9 +124,9 @@ index bb95e26..286eecd 100644
 +void
  spawn(const Arg *arg)
  {
- 	if (arg->v == dmenucmd)
+ 	struct sigaction sa;
 @@ -2139,6 +2160,7 @@ main(int argc, char *argv[])
- 	setup();
+ #endif /* __OpenBSD__ */
  	scan();
  	run();
 +	if(restart) execvp(argv[0], argv);
