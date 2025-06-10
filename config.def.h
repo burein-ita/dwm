@@ -6,8 +6,8 @@ static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int user_bh            = 14;        /* 2 is the default spacing around the bar's font */
-static const char *fonts[]          = { "monospace:size=11:style=bold", "Siji:size=11:style=Regular" };
+static const int user_bh            = 13;        /* 2 is the default spacing around the bar's font */
+static const char *fonts[]          = { "Siji:size=11:style=Regular", "monospace:size=11:style=bold" };
 static const char dmenufont[]       = "monospace:size=11:style=bold";
 static const char col_text1[]       = "#808080";
 static const char col_text2[]       = "#000000";
@@ -23,19 +23,23 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"st", "-e", "ncmpcpp", NULL,
-	"hsetroot", "-cover", ".local/share/wallpaper/CO-1.png", NULL,
 	"xrdb", ".Xresources", NULL,
-	"xset", "r", "rate", "200", "30", NULL,
-	"dunst", NULL,
+	"hsetroot", "-cover", ".local/share/wallpaper/CO-1.png", NULL,
+	"xset", "r", "rate", "300", "90", NULL,
+	"sxhkd", NULL,
+	"unclutter", NULL,
 	"picom", NULL,
+	"dunst", NULL,
+	"qpwgraph", NULL,
+	"keepassxc", NULL,
+	"st", "-c", "Music-Terminal", "-e", "ncmpcpp", NULL,
 	NULL /* terminate */
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const int momentaryalttags = 0; /* 1 means alttags will show only when key is held down*/
+static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7" };
+static const char *tags[] = { "", "", "", "", "", "", "" };
+static const int momentaryalttags = 1; /* 1 means alttags will show only when key is held down*/
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -43,7 +47,9 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "dummy",     NULL,       NULL,       0,            1,           -1 },
+	{ "Music-Terminal", NULL, NULL,       1<<4,         0,           0 },
+	{ "KeePassXC",      NULL, NULL,       1<<5,         0,           0 },
+	{ "qpwgraph",       NULL, NULL,       1<<6,         0,           0 },
 };
 
 /* layout(s) */
@@ -55,9 +61,9 @@ static const int mainmon = 0; /* xsetroot will only change the bar on this monit
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "",      tile },    /* first entry is default */
-	{ "",      NULL },    /* no layout function means floating behavior */
-	{ "",      monocle },
+	{ "",      tile },    /* first entry is default */
+	{ "",      NULL },    /* no layout function means floating behavior */
+	{ "",      monocle },
 };
 
 /* key definitions */
@@ -113,8 +119,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_5,                      4)
 	TAGKEYS(                        XK_6,                      5)
 	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
+/*	TAGKEYS(                        XK_8,                      7)
+	TAGKEYS(                        XK_9,                      8)*/
 	{ MODKEY|Mod1Mask,              XK_q,      quit,           {0} },
 	{ MODKEY|Mod1Mask,              XK_c,      quit,           {1} },
 };
