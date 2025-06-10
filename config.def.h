@@ -23,11 +23,10 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"st", NULL,
-	"st", "-e", "nnn", "data",  NULL,
 	"st", "-e", "ncmpcpp", NULL,
 	"hsetroot", "-cover", ".local/share/wallpaper/CO-1.png", NULL,
 	"xrdb", ".Xresources", NULL,
+	"xset", "r", "rate", "200", "30", NULL,
 	"dunst", NULL,
 	"picom", NULL,
 	NULL /* terminate */
@@ -50,7 +49,7 @@ static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
-static const int mainmon = 1; /* xsetroot will only change the bar on this monitor */
+static const int mainmon = 0; /* xsetroot will only change the bar on this monitor */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -72,7 +71,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-p", "CMD: ", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg1, "-nf", col_text1, "-sb", col_bg2, "-sf", col_text2, topbar ? NULL : "-b", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-p", "CMD: ", "-m", dmenumon, "-fn", dmenufont, topbar ? NULL : "-b", NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static const Key keys[] = {
@@ -80,6 +79,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+	{ Mod1Mask,                     XK_Tab,    focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_l,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
@@ -88,6 +88,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_semicolon,      setmfact,       {.f = +0.1} },
 	{ MODKEY,                       XK_z,      zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
+	{ Mod1Mask,                     XK_Tab,    focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_Escape, killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_s,      setlayout,      {.v = &layouts[1]} },
