@@ -26,9 +26,9 @@ index 061ad662f82a..e912edd557cf 100644
  	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
  	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 +	{ MODKEY,                       XK_n,      togglealttag,   {0} },
+ 	{ MODKEY,                       XK_x,      movecenter,     {0} },
  	TAGKEYS(                        XK_1,                      0)
  	TAGKEYS(                        XK_2,                      1)
- 	TAGKEYS(                        XK_3,                      2)
 diff --git a/dwm.c b/dwm.c
 index e5efb6a22806..12ff3f0768bc 100644
 --- a/dwm.c
@@ -38,9 +38,9 @@ index e5efb6a22806..12ff3f0768bc 100644
  	Window barwin;
  	const Layout *lt[2];
 +	unsigned int alttag;
+ 	Pertag *pertag;
  };
  
- typedef struct {
 @@ -177,6 +178,7 @@ static void grabbuttons(Client *c, int focused);
  static void grabkeys(void);
  static void incnmaster(const Arg *arg);
@@ -52,11 +52,11 @@ index e5efb6a22806..12ff3f0768bc 100644
 @@ -210,6 +212,7 @@ static void spawn(const Arg *arg);
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
- static void tile(Monitor *);
+ static void tile(Monitor *m);
 +static void togglealttag(const Arg *arg);
  static void togglebar(const Arg *arg);
  static void togglefloating(const Arg *arg);
- static void toggletag(const Arg *arg);
+ static void togglefullscr(const Arg *arg);
 @@ -254,6 +257,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
  	[Expose] = expose,
  	[FocusIn] = focusin,
@@ -66,25 +66,25 @@ index e5efb6a22806..12ff3f0768bc 100644
  	[MapRequest] = maprequest,
  	[MotionNotify] = motionnotify,
 @@ -699,7 +703,7 @@ dirtomon(int dir)
- void
  drawbar(Monitor *m)
  {
--	int x, w, tw = 0;
-+	int x, w, wdelta, tw = 0;
+ 	int indn;
+-	int x, y = borderpx, w, tw = 0;
++	int x, y = borderpx, w, wdelta, tw = 0;
+ 	int th = bh - borderpx * 2;
+ 	int mw = m->ww - borderpx * 2;
  	int boxs = drw->fonts->h / 9;
- 	int boxw = drw->fonts->h / 6 + 2;
- 	unsigned int i, occ = 0, urg = 0;
 @@ -723,8 +727,9 @@ drawbar(Monitor *m)
- 	x = 0;
- 	for (i = 0; i < LENGTH(tags); i++) {
+ 
+ 		indn = 0;
  		w = TEXTW(tags[i]);
 +		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
  		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
--		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-+		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
- 		if (occ & 1 << i)
- 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
- 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
+-		drw_text(drw, x, y, w, th, lrpad / 2, tags[i], urg & 1 << i);
++		drw_text(drw, x, y, w, th, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+ 
+ 		for (c = m->clients; c; c = c->next) {
+ 			if (c->tags & (1 << i)) {
 @@ -1003,6 +1008,25 @@ keypress(XEvent *e)
  			keys[i].func(&(keys[i].arg));
  }
