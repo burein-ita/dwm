@@ -783,9 +783,9 @@ void
 drawbar(Monitor *m)
 {
 	int indn;
-	int x, y = borderpx, w, wdelta, tw = 0;
-	int th = bh - borderpx * 2;
-	int mw = m->ww - borderpx * 2;
+	int x, y = borbarpx, w, wdelta, tw = 0;
+	int th = bh - borbarpx * 2;
+	int mw = m->ww - borbarpx * 2;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -801,7 +801,7 @@ drawbar(Monitor *m)
 	if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-		drw_text(drw, mw - tw, y, tw + borderpx, th, 0, stext, 0);
+		drw_text(drw, mw - tw, y, tw + borbarpx, th, 0, stext, 0);
 	}
 
 	for (c = m->clients; c; c = c->next) {
@@ -809,17 +809,17 @@ drawbar(Monitor *m)
 		if (c->isurgent)
 			urg |= c->tags;
 	}
-	x = borderpx;
+	x = borbarpx;
 	for (i = 0; i < LENGTH(tags); i++) {
 		/* do not draw vacant tags */
 		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 		continue;
 
 		indn = 0;
-		w = TEXTW(tags[i]);
+		w = TEXTW(tags[i]) - 5;
 		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, y, w, th, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+		drw_text(drw, x, y, w, th, wdelta + lrpad / 2 - 1, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
 
 		for (c = m->clients; c; c = c->next) {
 			if (c->tags & (1 << i)) {
