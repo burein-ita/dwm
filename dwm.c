@@ -807,7 +807,7 @@ drawbar(Monitor *m)
 	XFillRectangle(drw->dpy, drw->drawable, drw->gc, 0, 0, m->ww, bh);
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
+	if (m == selmon || 1) { /* status is only drawn on selected monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 		drw_text(drw, mw - tw, y, tw + borbarpx, th, 0, stext, 0);
@@ -2362,9 +2362,11 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
+	Monitor* m;
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
-	drawbar(selmon);
+	for(m = mons; m; m = m->next)
+		drawbar(selmon);
 }
 
 void
