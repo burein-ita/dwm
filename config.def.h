@@ -8,7 +8,7 @@ static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const int user_bh            = 14;        /* 2 is the default spacing around the bar's font */
-static const char *fonts[]          = { "Terminus:size=11:style=Bold", "Siji:style=Regular" };
+static const char *fonts[]          = {"Terminus:size=11:style=Bold", "Siji:style=Regular" };
 static const char dmenufont[]       = "Terminus:size=11:style=Bold";
 static const char col_text1[]       = "#808080";
 static const char col_text2[]       = "#000000";
@@ -75,8 +75,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "",      tile },    /* first entry is default */
-	{ "",      NULL },    /* no layout function means floating behavior */
-	{ "",      monocle },
+	{ "",      NULL },    /* no layout function means floating behavior */
+	{ "",      monocle },
 	{ "",      deck },
 };
 
