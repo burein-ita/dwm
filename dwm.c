@@ -1320,7 +1320,7 @@ monocle(Monitor *m)
 		if (ISVISIBLE(c))
 			n++;
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		resize(c, m->wx, m->wy, m->ww, m->wh, 0);
 }
 
 void
@@ -1560,6 +1560,9 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
 	wc.border_width = c->bw;
+	/* if monocle don't draw borders */
+	if (c->mon->lt[c->mon->sellt]->arrange == monocle && !c->isfloating)
+		wc.border_width = 0;
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
 	XSync(dpy, False);
