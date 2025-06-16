@@ -1,0 +1,37 @@
+[ PATCH LIST ]
+pertag
+alwaysontopall
+cool_autostart
+fullgaps [without keybinds]
+tiledmove
+actualfullscreen
+statusallmons
+attachbottom
+movecenter
+cursorwarp
+bar-height-spacing [same as dmenu]
+preventfocusshift
+dmenumatchtop
+autoraise_windows
+alwayscenter
+border-bar
+clientindicatorshidevacant
+alternativetags
+restartsig
+noborderflicker
+scratchpads
+aspectresize
+resizehere
+deck
+deck-gaps
+toggleallmonspertag
+warp
+moveresize
+barpadding
+
+[ OTHER MODS ]
+Unique bar border size
+No borders on monocle layout
+No icon override on monocle and deck layouts
+Fix transparent borders
+Change title colorsheme
