@@ -13,8 +13,8 @@ static const char dmenufont[]       = "Terminus:size=11:style=Bold";
 static const char col_text1[]       = "#808080";
 static const char col_text2[]       = "#000000";
 static const char col_bg1[]         = "#000000";
-static const char col_bg2[]         = "#606080";
-static const char col_border2[]     = "#606080";
+static const char col_bg2[]         = "#804040";
+static const char col_border2[]     = "#804040";
 static const char col_border1[]     = "#202020";
 static const char col_borderbar[]   = "#000000";
 static const char *colors[][3]      = {
@@ -25,7 +25,7 @@ static const char *colors[][3]      = {
 
 static const char *const autostart[] = {
 	"xrdb", ".Xresources", NULL,
-	"hsetroot", "-cover", ".local/share/wallpaper/CO-1.png", NULL,
+	"hsetroot", "-extend", ".local/share/wallpaper/WALL.png", NULL,
 	"xset", "r", "rate", "300", "90", NULL,
     "bash", "-c", "dwm_stats 10", NULL,
 	"sh", "-c", "wp-setup", NULL,
