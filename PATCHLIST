@@ -8,7 +8,6 @@ actualfullscreen
 statusallmons
 attachbottom
 movecenter
-cursorwarp
 bar-height-spacing [same as dmenu]
 preventfocusshift
 dmenumatchtop
@@ -27,7 +26,6 @@ deck-gaps
 toggleallmonspertag
 warp
 moveresize
-barpadding
 
 [ OTHER MODS ]
 Unique bar border size
