@@ -2,19 +2,19 @@
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int borbarpx  = 4;        /* border pixel of bar */
+static const unsigned int borbarpx  = 0;        /* border pixel of bar */
 static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const int user_bh            = 14;        /* 2 is the default spacing around the bar's font */
+static const int user_bh            = 6;        /* 2 is the default spacing around the bar's font */
 static const char *fonts[]          = {"Terminus:size=11:style=Bold", "Siji:style=Regular" };
 static const char dmenufont[]       = "Terminus:size=11:style=Bold";
 static const char col_text1[]       = "#808080";
 static const char col_text2[]       = "#000000";
 static const char col_bg1[]         = "#000000";
-static const char col_bg2[]         = "#804040";
-static const char col_border2[]     = "#804040";
+static const char col_bg2[]         = "#808080";
+static const char col_border2[]     = "#808080";
 static const char col_border1[]     = "#202020";
 static const char col_borderbar[]   = "#000000";
 static const char *colors[][3]      = {
@@ -24,13 +24,12 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"xrdb", ".Xresources", NULL,
 	"hsetroot", "-extend", ".local/share/wallpaper/WALL.png", NULL,
-	"xset", "r", "rate", "300", "90", NULL,
+	"xset", "r", "rate", "450", "80", NULL,
+	"xrdb", "-merge", ".Xresources", NULL,
     "bash", "-c", "dwm_stats 10", NULL,
 	"sh", "-c", "wp-setup", NULL,
 	"sxhkd", NULL,
-	"unclutter", NULL,
 	"picom", NULL,
 	"dunst", NULL,
 	NULL /* terminate */
