@@ -24,10 +24,10 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"hsetroot", "-extend", ".local/share/wallpaper/WALL.png", NULL,
+	"xwallpaper", "--tile", ".local/share/wallpaper/WALL.png", NULL,
 	"xset", "r", "rate", "450", "80", NULL,
-	"xrdb", "-merge", ".Xresources", NULL,
-    "bash", "-c", "dwm_stats 10", NULL,
+	"xrdb", "-merge", ".config/X11/xresources", NULL,
+    "bash", "-c", "dwm_stats 1", NULL,
 	"sh", "-c", "wp-setup", NULL,
 	"sxhkd", NULL,
 	"picom", NULL,
@@ -60,9 +60,11 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "mu-term",   NULL, NULL,       SPTAG(0),         1,           0 },
-	{ "KeePassXC", NULL, NULL,       SPTAG(1),         1,           0 },
-	{ "qpwgraph",  NULL, NULL,       SPTAG(2),         1,           0 },
+	{ "mu-term",   NULL,       NULL,       SPTAG(0),         1,           -1 },
+	{ "KeePassXC", NULL,       NULL,       SPTAG(1),         1,           -1 },
+	{ "qpwgraph",  NULL,       NULL,       SPTAG(2),         1,           -1 },
+	{ "tabbed",    "st-float", NULL,       0,                1,           -1 },
+	{ "mpv",       "mpvk",     "WEBCAM",   0,                1,           -1 },
 };
 
 /* layout(s) */
@@ -74,9 +76,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "",      tile },    /* first entry is default */
-	{ "",      NULL },    /* no layout function means floating behavior */
+	{ "",      NULL },    /* no layout function means floating behavior */
 	{ "",      monocle },
-	{ "",      deck },
+	{ "",      deck },
 };
 
 /* key definitions */
@@ -93,12 +95,14 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-p", "CMD: ", "-m", dmenumon, "-fn", dmenufont, topbar ? NULL : "-b", NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "tabbed", "-k", "-c", "-r2", "st", "-w", "''", NULL };
+static const char *fermcmd[]  = { "tabbed", "-n", "st-float", "-k", "-c", "-r2", "st", "-w", "''", NULL };
 
 static const Key keys[] = {
 	/* modifier            key            function            argument */
 	{ MODKEY,              XK_r,          spawn,              {.v = dmenucmd } },
 	{ MODKEY,              XK_Return,     spawn,              {.v = termcmd } },
+	{ MODKEY|Mod1Mask,     XK_Return,     spawn,              {.v = fermcmd } },
 	{ MODKEY,              XK_b,          togglebar,          {0} },
 	{ Mod1Mask,            XK_Tab,        focusstack,         {.i = +1 } },
 	{ Mod1Mask|ShiftMask,  XK_Tab,        focusstack,         {.i = -1 } },
