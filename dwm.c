@@ -867,9 +867,9 @@ drawbar(Monitor *m)
 
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon || 1) { /* status is only drawn on selected monitor */
-		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_setscheme(drw, scheme[SchemeSel]);
 		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-		drw_text(drw, mw - tw, y, tw + borbarpx, th, 0, stext, 0);
+		drw_text(drw, mw - tw, y, tw + borbarpx, th, 1, stext, 0);
 	}
 
 	for (c = m->clients; c; c = c->next) {
@@ -887,7 +887,12 @@ drawbar(Monitor *m)
 		w = TEXTW(tags[i]) - 6;
 		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - 3 - TEXTW(tagsalt[i])) / 2 : 0;
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, y, w, th, wdelta + lrpad / 2 - 1, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+		/* fix terminus and siji font position*/
+		if (selmon->alttag) {
+			drw_text(drw, x, y, w, th, wdelta + lrpad / 2 - 1, tagsalt[i], urg & 1 << i);
+		} else {
+			drw_text(drw, x, y - 1, w, th + 1, wdelta + lrpad / 2 - 1, tags[i], urg & 1 << i);
+		}
 
 		for (c = m->clients; c; c = c->next) {
 			if (c->tags & (1 << i)) {
